@@ -1,22 +1,14 @@
-use std::path::Path;
+use clap::Parser as _;
 
-use anyhow::ensure;
-use clap::Parser;
-use directory::insta_directory;
-use one_image::insta_one_file;
+use crate::args::InstasizeArgs;
+use crate::directory::insta_directory;
+use crate::one_image::insta_one_file;
+use crate::paths::{get_source_path, get_target_path};
 
+mod args;
 mod one_image;
 mod directory;
-
-#[derive(Debug, Parser)]
-#[command(version, about, long_about = None)]
-/// Takes the source image and makes an image suitable for Instagram, aka 4/5 aspect ratio.
-pub struct InstasizeArgs {
-    /// Source image
-    pub source: String,
-    /// Target image 
-    pub target: String
-}
+mod paths;
 
 fn main() -> anyhow::Result<()>{
     let args = InstasizeArgs::parse(); 
@@ -31,15 +23,4 @@ fn main() -> anyhow::Result<()>{
     }
 
     Ok(())
-}
-
-fn get_source_path(args: &InstasizeArgs) -> anyhow::Result<&Path> {
-    let source = Path::new(&args.source);
-    ensure!(source.exists(), "Source {} does not exist", args.source);
-    Ok(source)
-}
-
-fn get_target_path(args: &InstasizeArgs) -> anyhow::Result<&Path> {
-    let target = Path::new(&args.target);
-    Ok(target)
 }
