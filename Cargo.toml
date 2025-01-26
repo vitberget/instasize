@@ -1,7 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
-    "instasize"
+    "instasize",
+    "instastack"
 ]
 
 [workspace.dependencies]
