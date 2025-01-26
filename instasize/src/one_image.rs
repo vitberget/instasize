@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use anyhow::{ensure, Context};
+use anyhow::{bail, ensure, Context};
 use image::{GenericImage, GenericImageView, ImageBuffer, ImageReader, Pixel, Primitive};
 
 pub fn insta_one_file(source: &Path, target: &Path) -> anyhow::Result<()> {
@@ -20,17 +20,17 @@ where
     S: Primitive + 'static, 
 {
     let (width, height) = source_image.dimensions();
-    if height > width {
-        let new_width = (height * 4) / 5;
+    let new_width = (height * 4) / 5;
+    let new_height = (width * 5) / 4;
 
-        let mut target_image = image::ImageBuffer::new(new_width, height);
+    let mut target_image = image::ImageBuffer::new(u32::max(width, new_width), u32::max(height, new_height));
+    if new_width > width {
         target_image.copy_from(source_image, (new_width - width) / 2, 0)?;
-
-        Ok(target_image)
+    } else if new_height > height {
+        target_image.copy_from(source_image, 0, (new_height - height) / 2)?;
     } else {
-        let mut target_image = image::ImageBuffer::new(width, height);
-        target_image.copy_from(source_image, 0, 0)?;
-
-        Ok(target_image)
+        bail!("No resize?");
     }
+
+    Ok(target_image)
 }
