@@ -5,9 +5,13 @@ use clap::Parser;
 use image::{DynamicImage, GenericImage, GenericImageView, ImageBuffer, ImageReader, Pixel, Primitive};
 
 #[derive(Debug, Parser)]
+#[command(version, about, long_about = None)]
+/// Takes the source images and makes a new image where they are stacked vertically.
 pub struct InstastackArgs {
     #[structopt(required = true)]
-    pub sources: Vec<String>,
+    /// The images you want to stack
+    pub source: Vec<String>,
+    /// The resulting image
     pub target: String
 }
 
@@ -73,7 +77,7 @@ where
 fn get_source_images(args: &InstastackArgs) -> anyhow::Result<Vec<DynamicImage>> {
     let mut images: Vec<DynamicImage> = vec![];
 
-    for filename in args.sources.clone() {
+    for filename in args.source.clone() {
         let path = Path::new(&filename);
         ensure!(path.exists(), "Source {filename} does not exist");
         let image = ImageReader::open(path)?.decode()?;
