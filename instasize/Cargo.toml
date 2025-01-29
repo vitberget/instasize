@@ -7,3 +7,4 @@ edition = "2021"
 anyhow = { workspace = true }
 clap = { workspace = true }
 image = { workspace = true }
+regex = "1.11.1"

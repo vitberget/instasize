@@ -17,9 +17,9 @@ fn main() -> anyhow::Result<()>{
     let target = get_target_path(&args)?;
 
     if source.is_file() {
-        insta_one_file(source, target)?;
+        insta_one_file(source, target, &args)?;
     } else {
-        insta_directory(source, target)?;
+        insta_directory(source, target, &args)?;
     }
 
     Ok(())

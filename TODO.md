@@ -2,5 +2,5 @@
 
 ## Instasize
 
-- [ ] Select fill color
-- [ ] Blur outset of original image instead of fill
+- [x] Select fill color
+- [x] Blur outset of original image instead of fill
