@@ -20,9 +20,13 @@ pub fn insta_one_file(source: &Path, target: &Path, args: &InstasizeArgs) -> any
 }
 
 fn extend_it(source_image: &RgbaImage, args: &InstasizeArgs) -> anyhow::Result<RgbaImage> {
+    const ASPECT_WIDTH: u32 = 3;
+    const ASPECT_HEIGHT: u32 = 4;
+
     let (width, height) = source_image.dimensions();
-    let new_width = (height * 4) / 5;
-    let new_height = (width * 5) / 4;
+
+    let new_width = (height * ASPECT_WIDTH) / ASPECT_HEIGHT;
+    let new_height = (width * ASPECT_HEIGHT) / ASPECT_WIDTH;
 
     let mut target_image = RgbaImage::new(u32::max(width, new_width), u32::max(height, new_height));
     if let Some(color) = args.color { fill_target(&mut target_image, &color)?; }
