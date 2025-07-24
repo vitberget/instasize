@@ -8,8 +8,8 @@ use image::{GenericImage, Rgb, Rgba, RgbaImage};
 use crate::args::InstasizeArgs;
 
 pub fn insta_one_file(source: &Path, target: &Path, args: &InstasizeArgs) -> anyhow::Result<()> {
-    ensure!(!target.exists(), "Target {:?} already exist", target);
-    println!("Processing {:?} -> {:?}", source, target);
+    ensure!(!target.exists(), "Target {target:?} already exist");
+    println!("Processing {source:?} -> {target:?}");
 
     let source_image = ImageReader::open(source)?.decode()?;
     let target_image = extend_it(&source_image.into_rgba8(), args)?;
