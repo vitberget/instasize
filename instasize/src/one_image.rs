@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use anyhow::{bail, ensure};
-use image::ImageReader;
+use anyhow::ensure;
+use image::{DynamicImage, ImageReader};
 use image::imageops::{self, FilterType};
 use image::{GenericImage, Rgb, Rgba, RgbaImage};
 
@@ -15,7 +15,11 @@ pub fn insta_one_file(source: &Path, target: &Path, args: &InstasizeArgs) -> any
     let target_image = extend_it(&source_image.into_rgba8(), args)?;
     let target_image = rgba8_to_rgb8(target_image);
 
-    target_image.save(target)?;
+    let dynamic: DynamicImage = target_image.into();
+    let dynamic = dynamic.resize(1080, 1440, FilterType::Lanczos3);
+
+    dynamic.save(target)?;
+
     Ok(())
 }
 
@@ -29,16 +33,17 @@ fn extend_it(source_image: &RgbaImage, args: &InstasizeArgs) -> anyhow::Result<R
     let new_height = (width * ASPECT_HEIGHT) / ASPECT_WIDTH;
 
     let mut target_image = RgbaImage::new(u32::max(width, new_width), u32::max(height, new_height));
-    if let Some(color) = args.color { fill_target(&mut target_image, &color)?; }
-    if let Some(blur_size) = args.blur { blur_target(source_image, &mut target_image, blur_size, args.adjust_brightness)?; }
+
+    if new_height != height || new_width != width {
+        if let Some(color) = args.color { fill_target(&mut target_image, &color)?; }
+        if let Some(blur_size) = args.blur { blur_target(source_image, &mut target_image, blur_size, args.adjust_brightness)?; }
+    }
 
     if new_width > width {
         target_image.copy_from(source_image, (new_width - width) / 2, 0)?;
     } else if new_height > height {
         target_image.copy_from(source_image, 0, (new_height - height) / 2)?;
-    } else {
-        bail!("No resize?");
-    }
+    } 
 
     Ok(target_image)
 }

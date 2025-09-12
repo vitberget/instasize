@@ -2,4 +2,4 @@
 
 ## Instasize
 
-- [ ] Output size to 1080x1350
+- [x] Output size to 1080 x 1440 px (3/4)
