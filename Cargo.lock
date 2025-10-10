@@ -513,6 +513,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "instawidth"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "image",
+]
+
+[[package]]
 name = "interpolate_name"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
