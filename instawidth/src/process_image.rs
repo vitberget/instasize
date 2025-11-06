@@ -16,9 +16,9 @@ pub fn insta_one_file(source: &Path, target: &Path) -> anyhow::Result<()> {
     let original_height = source_image.height();
 
     let target_height = (original_height * TARGET_WIDTH) / original_width;
-    let source_image = source_image.resize(TARGET_WIDTH, target_height, FilterType::Lanczos3);
+    let target_image = source_image.resize(TARGET_WIDTH, target_height, FilterType::Lanczos3);
 
-    source_image.save(target)?;
+    target_image.save(target)?;
 
     Ok(())
 }
